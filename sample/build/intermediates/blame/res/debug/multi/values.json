@@ -11,7 +11,14 @@
                     "endOffset": 401
                 },
                 "from": {
-                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/src/main/res/values/strings.xml"
+                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 121,
+                        "endColumn": 58,
+                        "endOffset": 175
+                    }
                 }
             },
             {
@@ -23,7 +30,14 @@
                     "endOffset": 428
                 },
                 "from": {
-                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/exploded-aar/path-menu/app/unspecified/res/values/values.xml"
+                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/exploded-aar/path-menu/app/unspecified/res/values/values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 347,
+                        "endColumn": 26,
+                        "endOffset": 369
+                    }
                 }
             },
             {
@@ -35,7 +49,14 @@
                     "endOffset": 493
                 },
                 "from": {
-                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/src/main/res/values/strings.xml"
+                    "file": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 56,
+                        "endColumn": 64,
+                        "endOffset": 116
+                    }
                 }
             }
         ]
