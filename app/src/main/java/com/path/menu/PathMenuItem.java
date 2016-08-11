@@ -1,5 +1,6 @@
 package com.path.menu;
 
+import android.animation.Animator;
 import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -13,9 +14,10 @@ public class PathMenuItem {
 
   private Drawable imgDrawable;
   private ImageView view;
-  private Animation outAnimation;
-  private Animation inAnimation;
   private Animation clickAnimation;
+
+  private Animator outAnimation;
+  private Animator inAnimation;
 
   private int id;
   private int imgResourceId;
@@ -62,20 +64,12 @@ public class PathMenuItem {
     return view;
   }
 
-  void setInAnimation(Animation inAnimation) {
+  void setInAnimation(Animator inAnimation) {
     this.inAnimation = inAnimation;
   }
 
-  Animation getInAnimation() {
-    return inAnimation;
-  }
-
-  void setOutAnimation(Animation outAnimation) {
+  void setOutAnimation(Animator outAnimation) {
     this.outAnimation = outAnimation;
-  }
-
-  Animation getOutAnimation() {
-    return outAnimation;
   }
 
   void setClickAnimation(Animation clickAnim) {
@@ -84,5 +78,19 @@ public class PathMenuItem {
 
   Animation getClickAnimation() {
     return clickAnimation;
+  }
+
+  /* --------------------------------------------------- */
+  /* > HelperMethod */
+  /* --------------------------------------------------- */
+
+  public void startInAnimation() {
+    outAnimation.end();
+    inAnimation.start();
+  }
+
+  public void startOutAnimation() {
+    inAnimation.end();
+    outAnimation.start();
   }
 }

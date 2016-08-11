@@ -1,16 +1,16 @@
 package com.path.menu;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 
 /**
  * Factory class for creating satellite in/out animations
@@ -20,6 +20,13 @@ import android.view.animation.TranslateAnimation;
 public class AnimatorCreator {
 
   private static final int START_DELAY_FACTOR = 25;
+
+  /* --------------------------------------------------- */
+  /* > OUT DURATION */
+  /* --------------------------------------------------- */
+
+  private static final int OUT_ALPHA_DURATION = 60; //60
+  private static final int OUT_ROTATE_DURATION = 100; //100
 
   /* --------------------------------------------------- */
   /* > IN INTERPOLATOR */
@@ -44,91 +51,84 @@ public class AnimatorCreator {
   /* > Animation Factory */
   /* --------------------------------------------------- */
 
-  public static Animation createItemInAnimation(int index, long expandDuration, int x, int y) {
+  public static Animator createItemInAnimation(View v, int index, long expandDur, int x, int y) {
 
-    RotateAnimation rotate =
-        new RotateAnimation(720, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-            0.5f);
+    ObjectAnimator rotate = ObjectAnimator.ofFloat(v, "rotation", 720f);
     rotate.setInterpolator(IN_ROTATE_INTERPOLATOR);
-    rotate.setDuration(expandDuration);
+    rotate.setDuration(expandDur);
 
     long delay = 250;
-    if (expandDuration <= 250) {
-      delay = expandDuration / 3;
+    if (expandDur <= 250) {
+      delay = expandDur / 3;
     }
 
     long duration = 400;
-    if ((expandDuration - delay) > duration) {
-      duration = expandDuration - delay;
+    if ((expandDur - delay) > duration) {
+      duration = expandDur - delay;
     }
 
-    TranslateAnimation translate = new TranslateAnimation(x, 0, y, 0);
-    translate.setDuration(duration);
-    translate.setStartOffset(delay);
-    translate.setInterpolator(IN_ANTICIPATE_INTERPOLATOR);
+    ObjectAnimator translateX = ObjectAnimator.ofFloat(v, "translationX", 0);
+    ObjectAnimator translateY = ObjectAnimator.ofFloat(v, "translationY", 0);
 
-    AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);
+    translateX.setDuration(duration);
+    translateY.setDuration(duration);
+
+    translateX.setInterpolator(IN_ANTICIPATE_INTERPOLATOR);
+    translateY.setInterpolator(IN_ANTICIPATE_INTERPOLATOR);
+
+    ObjectAnimator alpha = ObjectAnimator.ofFloat(v, "alpha", 0f);
     long alphaDuration = 10;
-    if (expandDuration < 10) {
-      alphaDuration = expandDuration / 10;
+    if (expandDur < 10) {
+      alphaDuration = expandDur / 10;
     }
-    alphaAnimation.setDuration(alphaDuration);
-    alphaAnimation.setStartOffset((delay + duration) - alphaDuration);
+    alpha.setDuration(alphaDuration);
+    alpha.setStartDelay((delay + duration) - alphaDuration);
 
-    AnimationSet animationSet = new AnimationSet(false);
-    animationSet.setFillAfter(false);
-    animationSet.setFillBefore(true);
-    animationSet.setFillEnabled(true);
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(translateX, translateY, alpha);
+    set.setStartDelay(START_DELAY_FACTOR * index);
 
-    animationSet.addAnimation(alphaAnimation);
-    animationSet.addAnimation(rotate);
-    animationSet.addAnimation(translate);
-    animationSet.setStartOffset(START_DELAY_FACTOR * index);
-    animationSet.start();
-    animationSet.startNow();
-
-    return animationSet;
+    return set;
   }
 
-  public static Animation createItemOutAnimation(int index, long expandDuration, int x, int y) {
+  public static Animator createItemOutAnimation(View v, int index, long expandDur, int x, int y) {
 
-    AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1f);
-    long alphaDuration = 60;
-    if (expandDuration < 60) {
-      alphaDuration = expandDuration / 4;
+    ObjectAnimator alpha = ObjectAnimator.ofFloat(v, "alpha", 1f);
+    long alphaDuration = OUT_ALPHA_DURATION;
+    if (expandDur < alphaDuration) {
+      alphaDuration = expandDur / 4;
     }
-    alphaAnimation.setDuration(alphaDuration);
-    alphaAnimation.setStartOffset(0);
+    alpha.setDuration(alphaDuration);
+    alpha.setStartDelay(0);
 
-    TranslateAnimation translate = new TranslateAnimation(0, x, 0, y);
-    translate.setStartOffset(0);
-    translate.setDuration(expandDuration);
-    translate.setInterpolator(OUT_OVERSHOOT_INTERPOLATOR);
+    ObjectAnimator translateX = ObjectAnimator.ofFloat(v, "translationX", x);
+    ObjectAnimator translateY = ObjectAnimator.ofFloat(v, "translationY", y);
 
-    RotateAnimation rotate =
-        new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-            0.5f);
+    translateX.setStartDelay(0);
+    translateY.setStartDelay(0);
+
+    translateX.setDuration(expandDur);
+    translateY.setDuration(expandDur);
+
+    translateX.setInterpolator(OUT_OVERSHOOT_INTERPOLATOR);
+    translateY.setInterpolator(OUT_OVERSHOOT_INTERPOLATOR);
+
+    ObjectAnimator rotate = ObjectAnimator.ofFloat(v, "rotation", 360f);
     rotate.setInterpolator(OUT_ROTATE_INTERPOLATOR);
 
-    long duration = 100;
-    if (expandDuration <= 150) {
-      duration = expandDuration / 3;
+    long duration = OUT_ROTATE_DURATION;
+    if (expandDur <= 150) {
+      duration = expandDur / 3;
     }
 
-    rotate.setDuration(expandDuration - duration);
-    rotate.setStartOffset(duration);
+    rotate.setDuration(expandDur - duration);
+    rotate.setStartDelay(duration);
 
-    AnimationSet animationSet = new AnimationSet(false);
-    animationSet.setFillAfter(true);
-    animationSet.setFillBefore(true);
-    animationSet.setFillEnabled(true);
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(alpha, rotate, translateX, translateY);
+    set.setStartDelay(START_DELAY_FACTOR * index);
 
-    animationSet.addAnimation(alphaAnimation);
-    animationSet.addAnimation(rotate);
-    animationSet.addAnimation(translate);
-    animationSet.setStartOffset(START_DELAY_FACTOR * index);
-
-    return animationSet;
+    return set;
   }
 
   public static Animation createMainButtonAnimation(Context context) {

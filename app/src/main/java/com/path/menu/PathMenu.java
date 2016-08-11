@@ -1,5 +1,6 @@
 package com.path.menu;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 import com.path.menu.common.SimpleAnimationListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -123,12 +123,12 @@ public class PathMenu extends FrameLayout {
       if (!rotated) {
         imgMain.startAnimation(mainRotateLeft);
         for (PathMenuItem item : menuItems) {
-          item.getView().startAnimation(item.getOutAnimation());
+          item.startOutAnimation();
         }
       } else {
         imgMain.startAnimation(mainRotateRight);
         for (PathMenuItem item : menuItems) {
-          item.getView().startAnimation(item.getInAnimation());
+          item.startInAnimation();
         }
       }
       rotated = !rotated;
@@ -140,7 +140,7 @@ public class PathMenu extends FrameLayout {
       if (!rotated) {
         imgMain.startAnimation(mainRotateLeft);
         for (PathMenuItem item : menuItems) {
-          item.getView().startAnimation(item.getOutAnimation());
+          item.startOutAnimation();
         }
       }
       rotated = !rotated;
@@ -152,7 +152,7 @@ public class PathMenu extends FrameLayout {
       if (rotated) {
         imgMain.startAnimation(mainRotateRight);
         for (PathMenuItem item : menuItems) {
-          item.getView().startAnimation(item.getInAnimation());
+          item.startInAnimation();
         }
       }
       rotated = !rotated;
@@ -172,18 +172,13 @@ public class PathMenu extends FrameLayout {
 
       ImageView itemView = (ImageView) inflater.inflate(R.layout.sat_item_cr, this, false);
       itemView.setTag(menuItem.getId());
-      itemView.setVisibility(View.INVISIBLE);
-      //itemView.setOnClickListener(internalItemClickListener);
-      itemView.setOnClickListener(new OnClickListener() {
-        @Override public void onClick(View view) {
-          Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
-        }
-      });
+      itemView.setVisibility(View.VISIBLE);
+      itemView.setOnClickListener(internalItemClickListener);
 
-      Animation itemOut =
-          AnimatorCreator.createItemOutAnimation(index, expandDuration, finalX, finalY);
-      Animation itemIn =
-          AnimatorCreator.createItemInAnimation(index, expandDuration, finalX, finalY);
+      Animator itemOut =
+          AnimatorCreator.createItemOutAnimation(itemView, index, expandDuration, finalX, finalY);
+      Animator itemIn =
+          AnimatorCreator.createItemInAnimation(itemView, index, expandDuration, finalX, finalY);
       Animation itemClick = AnimatorCreator.createItemClickAnimation(getContext());
 
       menuItem.setView(itemView);
@@ -191,8 +186,6 @@ public class PathMenu extends FrameLayout {
       menuItem.setOutAnimation(itemOut);
       menuItem.setClickAnimation(itemClick);
 
-      itemIn.setAnimationListener(new PathAnimationListener(itemView, true, viewToItemMap));
-      itemOut.setAnimationListener(new PathAnimationListener(itemView, false, viewToItemMap));
       itemClick.setAnimationListener(new PathItemClickListener(this, menuItem.getId()));
 
       if (menuItem.getImgResourceId() > 0) {
@@ -384,52 +377,13 @@ public class PathMenu extends FrameLayout {
 
     @Override public void onClick(View v) {
       PathMenu menu = menuRef.get();
-      if (menu != null && v.getVisibility() == View.VISIBLE) {
+      if (menu != null) {
         PathMenuItem menuItem = menu.getViewToItemMap().get(v);
         v.startAnimation(menuItem.getClickAnimation());
       }
     }
   }
 
-  /* --------------------------------------------------- */
-  /* > Utils */
-  /* --------------------------------------------------- */
-
-  private static class PathAnimationListener implements Animation.AnimationListener {
-
-    private WeakReference<View> viewRef;
-    private boolean isInAnimation;
-    private Map<View, PathMenuItem> viewToItemMap;
-
-    public PathAnimationListener(View view, boolean isIn, Map<View, PathMenuItem> viewToItemMap) {
-      this.viewRef = new WeakReference<>(view);
-      this.isInAnimation = isIn;
-      this.viewToItemMap = viewToItemMap;
-    }
-
-    @Override public void onAnimationStart(Animation animation) {
-      if (viewRef == null) return;
-      View view = viewRef.get();
-      if (view != null) {
-        viewToItemMap.get(view).getView().setVisibility(View.VISIBLE);
-      }
-    }
-
-    @Override public void onAnimationRepeat(Animation animation) {
-    }
-
-    @Override public void onAnimationEnd(Animation animation) {
-      if (viewRef == null) return;
-      View view = viewRef.get();
-      if (view != null) {
-        viewToItemMap.get(view)
-            .getView()
-            .setVisibility(isInAnimation
-                ? View.INVISIBLE
-                : View.VISIBLE);
-      }
-    }
-  }
 
   /* --------------------------------------------------- */
   /* > Parcelable */
