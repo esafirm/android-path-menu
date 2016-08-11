@@ -1,6 +1,7 @@
 package com.path.menu;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -179,14 +180,14 @@ public class PathMenu extends FrameLayout {
           AnimatorCreator.createItemOutAnimation(itemView, index, expandDuration, finalX, finalY);
       Animator itemIn =
           AnimatorCreator.createItemInAnimation(itemView, index, expandDuration, finalX, finalY);
-      Animation itemClick = AnimatorCreator.createItemClickAnimation(getContext());
+      Animator itemClick = AnimatorCreator.createItemClickAnimation(itemView);
 
       menuItem.setView(itemView);
       menuItem.setInAnimation(itemIn);
       menuItem.setOutAnimation(itemOut);
       menuItem.setClickAnimation(itemClick);
 
-      itemClick.setAnimationListener(new PathItemClickListener(this, menuItem.getId()));
+      itemClick.addListener(new PathItemClickListener(this, menuItem.getId()));
 
       if (menuItem.getImgResourceId() > 0) {
         itemView.setImageResource(menuItem.getImgResourceId());
@@ -348,7 +349,7 @@ public class PathMenu extends FrameLayout {
     void onClick(int id);
   }
 
-  private static class PathItemClickListener extends SimpleAnimationListener {
+  private static class PathItemClickListener extends AnimatorListenerAdapter {
     private WeakReference<PathMenu> menuRef;
     private int tag;
 
@@ -357,7 +358,7 @@ public class PathMenu extends FrameLayout {
       this.tag = tag;
     }
 
-    @Override public void onAnimationStart(Animation animation) {
+    @Override public void onAnimationStart(Animator animation) {
       PathMenu menu = menuRef.get();
       if (menu != null && menu.closeItemsOnClick) {
         menu.close();
@@ -379,7 +380,7 @@ public class PathMenu extends FrameLayout {
       PathMenu menu = menuRef.get();
       if (menu != null) {
         PathMenuItem menuItem = menu.getViewToItemMap().get(v);
-        v.startAnimation(menuItem.getClickAnimation());
+        menuItem.startClickAnimation();
       }
     }
   }

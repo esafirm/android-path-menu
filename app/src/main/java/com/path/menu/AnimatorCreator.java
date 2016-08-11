@@ -1,6 +1,7 @@
 package com.path.menu;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -131,16 +132,30 @@ public class AnimatorCreator {
     return set;
   }
 
+  public static Animator createItemClickAnimation(final View view) {
+    ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 3f);
+    ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 3f);
+    ObjectAnimator alpha = ObjectAnimator.ofFloat(view, "alpha", 0f);
+
+    AnimatorSet set = new AnimatorSet();
+    set.playTogether(scaleX, scaleY, alpha);
+    set.setDuration(300);
+    set.addListener(new AnimatorListenerAdapter() {
+      @Override public void onAnimationEnd(Animator animation) {
+        view.setScaleX(1f);
+        view.setScaleY(1f);
+      }
+    });
+
+    return set;
+  }
+
   public static Animation createMainButtonAnimation(Context context) {
     return AnimationUtils.loadAnimation(context, R.anim.sat_main_rotate_left);
   }
 
   public static Animation createMainButtonInverseAnimation(Context context) {
     return AnimationUtils.loadAnimation(context, R.anim.sat_main_rotate_right);
-  }
-
-  public static Animation createItemClickAnimation(Context context) {
-    return AnimationUtils.loadAnimation(context, R.anim.sat_item_anim_click);
   }
 
   public static int getTranslateX(float degree, int distance) {
