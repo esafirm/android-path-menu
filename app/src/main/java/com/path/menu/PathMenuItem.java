@@ -1,7 +1,7 @@
 package com.path.menu;
 
+import android.animation.Animator;
 import android.graphics.drawable.Drawable;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 
 /**
@@ -11,16 +11,15 @@ import android.widget.ImageView;
  */
 public class PathMenuItem {
 
-  private int id;
-  private int imgResourceId;
   private Drawable imgDrawable;
   private ImageView view;
-  private ImageView cloneView;
-  private Animation outAnimation;
-  private Animation inAnimation;
-  private Animation clickAnimation;
-  private int finalX;
-  private int finalY;
+
+  private Animator clickAnimation;
+  private Animator outAnimation;
+  private Animator inAnimation;
+
+  private int id;
+  private int imgResourceId;
 
   public PathMenuItem(int id, int imgResourceId) {
     this.imgResourceId = imgResourceId;
@@ -64,51 +63,33 @@ public class PathMenuItem {
     return view;
   }
 
-  void setInAnimation(Animation inAnimation) {
+  void setInAnimation(Animator inAnimation) {
     this.inAnimation = inAnimation;
   }
 
-  Animation getInAnimation() {
-    return inAnimation;
-  }
-
-  void setOutAnimation(Animation outAnimation) {
+  void setOutAnimation(Animator outAnimation) {
     this.outAnimation = outAnimation;
   }
 
-  Animation getOutAnimation() {
-    return outAnimation;
-  }
-
-  void setFinalX(int finalX) {
-    this.finalX = finalX;
-  }
-
-  void setFinalY(int finalY) {
-    this.finalY = finalY;
-  }
-
-  int getFinalX() {
-    return finalX;
-  }
-
-  int getFinalY() {
-    return finalY;
-  }
-
-  void setCloneView(ImageView cloneView) {
-    this.cloneView = cloneView;
-  }
-
-  ImageView getCloneView() {
-    return cloneView;
-  }
-
-  void setClickAnimation(Animation clickAnim) {
+  void setClickAnimation(Animator clickAnim) {
     this.clickAnimation = clickAnim;
   }
 
-  Animation getClickAnimation() {
-    return clickAnimation;
+  /* --------------------------------------------------- */
+  /* > HelperMethod */
+  /* --------------------------------------------------- */
+
+  public void startInAnimation() {
+    outAnimation.end();
+    inAnimation.start();
+  }
+
+  public void startOutAnimation() {
+    inAnimation.end();
+    outAnimation.start();
+  }
+
+  public void startClickAnimation(){
+    clickAnimation.start();
   }
 }

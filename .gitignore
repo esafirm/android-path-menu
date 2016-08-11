@@ -1,3 +1,5 @@
+app/build
+sample/build
 .idea
 .gradle
 /local.properties
@@ -7,4 +9,4 @@
 /capture
 *.apk
 gradle.properties
-
+*.iml

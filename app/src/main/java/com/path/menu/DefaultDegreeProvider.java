@@ -7,7 +7,8 @@ package com.path.menu;
  *
  * @author Siyamed SINIR
  */
-public class DefaultDegreeProvider implements IDegreeProvider {
+public class DefaultDegreeProvider implements DegreeProvider {
+
   public float[] getDegrees(int count, float totalDegrees) {
     if (count < 1) {
       return new float[] {};

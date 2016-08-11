@@ -5,14 +5,14 @@ package com.path.menu;
  *
  * @author Siyamed SINIR
  */
-public class LinearDegreeProvider implements DegreeProvider {
+public class CounterDegreeProvider implements DegreeProvider {
   public float[] getDegrees(int count, float totalDegrees) {
     if (count < 1) {
       return new float[] {};
     }
 
     if (count == 1) {
-      return new float[] { 45f };
+      return new float[] { getValue(45f) };
     }
 
     float[] result;
@@ -22,9 +22,13 @@ public class LinearDegreeProvider implements DegreeProvider {
     float delta = totalDegrees / tmpCount;
 
     for (int index = 0; index < count; index++) {
-      result[index] = index * delta;
+      result[index] = getValue(index * delta);
     }
 
     return result;
+  }
+
+  private float getValue(float val) {
+    return -(270 - val);
   }
 }
