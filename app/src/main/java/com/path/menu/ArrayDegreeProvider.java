@@ -7,7 +7,7 @@ package com.path.menu;
  * @author Siyamed SINIR
  *
  */
-public class ArrayDegreeProvider implements IDegreeProvider {
+public class ArrayDegreeProvider implements DegreeProvider {
 	private float[] degrees;
 	
 	public ArrayDegreeProvider(float[] degrees) {

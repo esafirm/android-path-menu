@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<declare-styleable name="PathMenu">
-		<attr name="expandDuration" format="integer" />
-		<attr name="closeOnClick" format="boolean" />
-		<attr name="totalSpacingDegree" format="float" />
-		<attr name="satelliteDistance" format="dimension" />
-		<attr name="mainImage" format="reference" />		
-	</declare-styleable>
+  <declare-styleable name="PathMenu">
+    <attr format="integer" name="expandDuration"/>
+    <attr format="boolean" name="closeOnClick"/>
+    <attr format="float" name="totalSpacingDegree"/>
+    <attr format="dimension" name="satelliteDistance"/>
+    <attr format="reference" name="mainImage"/>
+  </declare-styleable>
 </resources>

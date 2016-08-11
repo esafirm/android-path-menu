@@ -4,54 +4,25 @@
     api-level="23"
     density="xhdpi"
     format="7"
-    timestamp="461743081585420"
-    token="3176499320364972828" >
+    timestamp="510054500534421"
+    token="3176499320364972828"
+    verifier="CLASS_ADDED" >
 
     <task
         name="javac"
-        duration="99" />
+        duration="37" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="142" />
+        duration="25" />
     <task
         name="verifier"
-        duration="17" />
+        duration="3" />
 
     <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/res/resources-debug.ap_"
-        type="RESOURCES" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_9/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_0/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_6/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_7/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_2/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_562f0d131fd23faa5151e59f59929499e069f26b/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_4/classes.dex"
-        type="DEX" />
-    <artifact
         location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_5/classes.dex"
-        type="DEX" />
-    <artifact
-        location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8bc6ec6aa014f1558643916b61ab8ddb7ae7bb66/classes.dex"
         type="DEX" />
     <artifact
         location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_3/classes.dex"
@@ -60,44 +31,16 @@
         location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_8/classes.dex"
         type="DEX" />
 
-    <build timestamp="411952832142737" >
+    <build timestamp="508948711631659" >
         <artifact
             location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/outputs/apk/sample-debug.apk"
             type="MAIN" />
     </build>
-    <build timestamp="461743081585420" >
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/res/resources-debug.ap_"
-            type="RESOURCES" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_9/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_0/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_6/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_7/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_1/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_2/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_562f0d131fd23faa5151e59f59929499e069f26b/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_4/classes.dex"
-            type="DEX" />
+    <build
+        timestamp="510054500534421"
+        verifier="CLASS_ADDED" >
         <artifact
             location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_5/classes.dex"
-            type="DEX" />
-        <artifact
-            location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8bc6ec6aa014f1558643916b61ab8ddb7ae7bb66/classes.dex"
             type="DEX" />
         <artifact
             location="/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/sample/build/intermediates/transforms/dex/debug/folders/1000/5/slice_3/classes.dex"

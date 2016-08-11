@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+import com.path.menu.common.SimpleAnimationListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +21,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Provides a "Path" like menu for android. ??
+ * Provides a "Path" like menu for android.
  *
- * TODO: tell about usage
- *
- * @author Siyamed SINIR
+ * @author Siyamed SINIR, Esafirm
  */
 public class PathMenu extends FrameLayout {
 
@@ -47,31 +46,38 @@ public class PathMenu extends FrameLayout {
   private AtomicBoolean plusAnimationActive = new AtomicBoolean(false);
 
   // ?? how to save/restore?
-  private IDegreeProvider gapDegreesProvider = new DefaultDegreeProvider();
+  private DegreeProvider gapDegreesProvider = new DefaultDegreeProvider();
 
   //States of these variables are saved
   private boolean rotated = false;
   private int measureDiff = 0;
+
   //States of these variables are saved - Also configured from XML
   private float totalSpacingDegree = DEFAULT_TOTAL_SPACING_DEGREES;
   private int satelliteDistance = DEFAULT_SATELLITE_DISTANCE;
   private int expandDuration = DEFAULT_EXPAND_DURATION;
   private boolean closeItemsOnClick = DEFAULT_CLOSE_ON_CLICK;
 
+  /* --------------------------------------------------- */
+  /* > Constructors */
+  /* --------------------------------------------------- */
+
   public PathMenu(Context context) {
-    super(context);
-    init(context, null, 0);
+    this(context, null);
   }
 
   public PathMenu(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    init(context, attrs, 0);
+    this(context, attrs, 0);
   }
 
   public PathMenu(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     init(context, attrs, defStyle);
   }
+
+  /* --------------------------------------------------- */
+  /* > Internal */
+  /* --------------------------------------------------- */
 
   private void init(Context context, AttributeSet attrs, int defStyle) {
     inflater = LayoutInflater.from(context);
@@ -89,20 +95,13 @@ public class PathMenu extends FrameLayout {
           typedArray.getBoolean(R.styleable.PathMenu_closeOnClick, DEFAULT_CLOSE_ON_CLICK);
       expandDuration =
           typedArray.getInt(R.styleable.PathMenu_expandDuration, DEFAULT_EXPAND_DURATION);
-      //float satelliteDistance = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170, getResources().getDisplayMetrics());
       typedArray.recycle();
     }
 
-    mainRotateLeft = PathAnimationCreator.createMainButtonAnimation(context);
-    mainRotateRight = PathAnimationCreator.createMainButtonInverseAnimation(context);
+    mainRotateLeft = AnimatorCreator.createMainButtonAnimation(context);
+    mainRotateRight = AnimatorCreator.createMainButtonInverseAnimation(context);
 
-    Animation.AnimationListener plusAnimationListener = new Animation.AnimationListener() {
-      @Override public void onAnimationStart(Animation animation) {
-      }
-
-      @Override public void onAnimationRepeat(Animation animation) {
-      }
-
+    Animation.AnimationListener plusAnimationListener = new SimpleAnimationListener() {
       @Override public void onAnimationEnd(Animation animation) {
         plusAnimationActive.set(false);
       }
@@ -113,14 +112,13 @@ public class PathMenu extends FrameLayout {
 
     imgMain.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        PathMenu.this.onClick();
+        onMainButtonClick();
       }
     });
-
     internalItemClickListener = new InternalSatelliteOnClickListener(this);
   }
 
-  private void onClick() {
+  private void onMainButtonClick() {
     if (plusAnimationActive.compareAndSet(false, true)) {
       if (!rotated) {
         imgMain.startAnimation(mainRotateLeft);
@@ -165,63 +163,51 @@ public class PathMenu extends FrameLayout {
 
     menuItems.addAll(items);
     removeView(imgMain);
-    TextView tmpView = new TextView(getContext());
-    tmpView.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
 
     float[] degrees = getDegrees(menuItems.size());
     int index = 0;
     for (PathMenuItem menuItem : menuItems) {
-      int finalX = PathAnimationCreator.getTranslateX(degrees[index], satelliteDistance);
-      int finalY = PathAnimationCreator.getTranslateY(degrees[index], satelliteDistance);
+      int finalX = AnimatorCreator.getTranslateX(degrees[index], satelliteDistance);
+      int finalY = AnimatorCreator.getTranslateY(degrees[index], satelliteDistance);
 
       ImageView itemView = (ImageView) inflater.inflate(R.layout.sat_item_cr, this, false);
-      ImageView cloneView = (ImageView) inflater.inflate(R.layout.sat_item_cr, this, false);
       itemView.setTag(menuItem.getId());
-      itemView.setVisibility(View.GONE);
-
-      cloneView.setVisibility(View.GONE);
-      cloneView.setOnClickListener(internalItemClickListener);
-      cloneView.setTag(menuItem.getId());
-      cloneView.setLayoutParams(getLayoutParams(cloneView, finalX, finalY));
-
-      if (menuItem.getImgResourceId() > 0) {
-        itemView.setImageResource(menuItem.getImgResourceId());
-        cloneView.setImageResource(menuItem.getImgResourceId());
-      } else if (menuItem.getImgDrawable() != null) {
-        itemView.setImageDrawable(menuItem.getImgDrawable());
-        cloneView.setImageDrawable(menuItem.getImgDrawable());
-      }
+      itemView.setVisibility(View.INVISIBLE);
+      //itemView.setOnClickListener(internalItemClickListener);
+      itemView.setOnClickListener(new OnClickListener() {
+        @Override public void onClick(View view) {
+          Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
+        }
+      });
 
       Animation itemOut =
-          PathAnimationCreator.createItemOutAnimation(getContext(), index, expandDuration, finalX,
-              finalY);
+          AnimatorCreator.createItemOutAnimation(index, expandDuration, finalX, finalY);
       Animation itemIn =
-          PathAnimationCreator.createItemInAnimation(getContext(), index, expandDuration, finalX,
-              finalY);
-      Animation itemClick = PathAnimationCreator.createItemClickAnimation(getContext());
+          AnimatorCreator.createItemInAnimation(index, expandDuration, finalX, finalY);
+      Animation itemClick = AnimatorCreator.createItemClickAnimation(getContext());
 
       menuItem.setView(itemView);
-      menuItem.setCloneView(cloneView);
       menuItem.setInAnimation(itemIn);
       menuItem.setOutAnimation(itemOut);
       menuItem.setClickAnimation(itemClick);
-      menuItem.setFinalX(finalX);
-      menuItem.setFinalY(finalY);
 
-      itemIn.setAnimationListener(new SatelliteAnimationListener(itemView, true, viewToItemMap));
-      itemOut.setAnimationListener(new SatelliteAnimationListener(itemView, false, viewToItemMap));
-      itemClick.setAnimationListener(
-          new SatelliteItemClickAnimationListener(this, menuItem.getId()));
+      itemIn.setAnimationListener(new PathAnimationListener(itemView, true, viewToItemMap));
+      itemOut.setAnimationListener(new PathAnimationListener(itemView, false, viewToItemMap));
+      itemClick.setAnimationListener(new PathItemClickListener(this, menuItem.getId()));
 
-      this.addView(itemView);
-      this.addView(cloneView);
+      if (menuItem.getImgResourceId() > 0) {
+        itemView.setImageResource(menuItem.getImgResourceId());
+      } else if (menuItem.getImgDrawable() != null) {
+        itemView.setImageDrawable(menuItem.getImgDrawable());
+      }
+
+      addView(itemView);
 
       viewToItemMap.put(itemView, menuItem);
-      viewToItemMap.put(cloneView, menuItem);
       index++;
     }
 
-    this.addView(imgMain);
+    addView(imgMain);
   }
 
   private float[] getDegrees(int count) {
@@ -254,107 +240,13 @@ public class PathMenu extends FrameLayout {
     setMeasuredDimension(totalWidth, totalHeight);
   }
 
-  private static class SatelliteItemClickAnimationListener implements Animation.AnimationListener {
-    private WeakReference<PathMenu> menuRef;
-    private int tag;
-
-    public SatelliteItemClickAnimationListener(PathMenu menu, int tag) {
-      this.menuRef = new WeakReference<>(menu);
-      this.tag = tag;
-    }
-
-    @Override public void onAnimationEnd(Animation animation) {
-    }
-
-    @Override public void onAnimationRepeat(Animation animation) {
-    }
-
-    @Override public void onAnimationStart(Animation animation) {
-      PathMenu menu = menuRef.get();
-      if (menu != null && menu.closeItemsOnClick) {
-        menu.close();
-        if (menu.itemClickedListener != null) {
-          menu.itemClickedListener.onClick(tag);
-        }
-      }
-    }
-  }
-
-  private static class SatelliteAnimationListener implements Animation.AnimationListener {
-    private WeakReference<View> viewRef;
-    private boolean isInAnimation;
-    private Map<View, PathMenuItem> viewToItemMap;
-
-    public SatelliteAnimationListener(View view, boolean isIn,
-        Map<View, PathMenuItem> viewToItemMap) {
-      this.viewRef = new WeakReference<>(view);
-      this.isInAnimation = isIn;
-      this.viewToItemMap = viewToItemMap;
-    }
-
-    @Override public void onAnimationStart(Animation animation) {
-      if (viewRef != null) {
-        View view = viewRef.get();
-        if (view != null) {
-          PathMenuItem menuItem = viewToItemMap.get(view);
-          if (isInAnimation) {
-            menuItem.getView().setVisibility(View.VISIBLE);
-            menuItem.getCloneView().setVisibility(View.GONE);
-          } else {
-            menuItem.getCloneView().setVisibility(View.GONE);
-            menuItem.getView().setVisibility(View.VISIBLE);
-          }
-        }
-      }
-    }
-
-    @Override public void onAnimationRepeat(Animation animation) {
-    }
-
-    @Override public void onAnimationEnd(Animation animation) {
-      if (viewRef != null) {
-        View view = viewRef.get();
-        if (view != null) {
-          PathMenuItem menuItem = viewToItemMap.get(view);
-
-          if (isInAnimation) {
-            menuItem.getView().setVisibility(View.GONE);
-            menuItem.getCloneView().setVisibility(View.GONE);
-          } else {
-            menuItem.getCloneView().setVisibility(View.VISIBLE);
-            menuItem.getView().setVisibility(View.GONE);
-          }
-        }
-      }
-    }
-  }
-
   public Map<View, PathMenuItem> getViewToItemMap() {
     return viewToItemMap;
   }
 
-  private static FrameLayout.LayoutParams getLayoutParams(View view, int finalX, int finalY) {
-    LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-    params.bottomMargin = Math.abs(finalY);
-    params.leftMargin = Math.abs(finalX);
-    return params;
-  }
-
-  private static class InternalSatelliteOnClickListener implements View.OnClickListener {
-    private WeakReference<PathMenu> menuRef;
-
-    public InternalSatelliteOnClickListener(PathMenu menu) {
-      this.menuRef = new WeakReference<>(menu);
-    }
-
-    @Override public void onClick(View v) {
-      PathMenu menu = menuRef.get();
-      if (menu != null) {
-        PathMenuItem menuItem = menu.getViewToItemMap().get(v);
-        v.startAnimation(menuItem.getClickAnimation());
-      }
-    }
-  }
+  /* --------------------------------------------------- */
+  /* > Public Methods */
+  /* --------------------------------------------------- */
 
   /**
    * Sets the click listener for satellite items.
@@ -367,7 +259,7 @@ public class PathMenu extends FrameLayout {
    * Defines the algorithm to define the gap between each item.
    * Note: Calling before adding items is strongly recommended.
    */
-  public void setGapDegreeProvider(IDegreeProvider gapDegreeProvider) {
+  public void setGapDegreeProvider(DegreeProvider gapDegreeProvider) {
     this.gapDegreesProvider = gapDegreeProvider;
     resetItems();
   }
@@ -417,7 +309,7 @@ public class PathMenu extends FrameLayout {
   /**
    * Sets the image drawable for the center button.
    *
-   * @param resource The image drawable.
+   * @param drawable The image drawable.
    */
   public void setMainImage(Drawable drawable) {
     this.imgMain.setImageDrawable(drawable);
@@ -429,6 +321,24 @@ public class PathMenu extends FrameLayout {
   public void setCloseItemsOnClick(boolean closeItemsOnClick) {
     this.closeItemsOnClick = closeItemsOnClick;
   }
+
+  /**
+   * Expand the menu items.
+   */
+  public void expand() {
+    openItems();
+  }
+
+  /**
+   * Collapse the menu items
+   */
+  public void close() {
+    closeItems();
+  }
+
+  /* --------------------------------------------------- */
+  /* > OnClick */
+  /* --------------------------------------------------- */
 
   /**
    * The listener class for item click event.
@@ -445,18 +355,80 @@ public class PathMenu extends FrameLayout {
     void onClick(int id);
   }
 
-  /**
-   * Expand the menu items.
-   */
-  public void expand() {
-    openItems();
+  private static class PathItemClickListener extends SimpleAnimationListener {
+    private WeakReference<PathMenu> menuRef;
+    private int tag;
+
+    public PathItemClickListener(PathMenu menu, int tag) {
+      this.menuRef = new WeakReference<>(menu);
+      this.tag = tag;
+    }
+
+    @Override public void onAnimationStart(Animation animation) {
+      PathMenu menu = menuRef.get();
+      if (menu != null && menu.closeItemsOnClick) {
+        menu.close();
+        if (menu.itemClickedListener != null) {
+          menu.itemClickedListener.onClick(tag);
+        }
+      }
+    }
   }
 
-  /**
-   * Collapse the menu items
-   */
-  public void close() {
-    closeItems();
+  private static class InternalSatelliteOnClickListener implements View.OnClickListener {
+    private WeakReference<PathMenu> menuRef;
+
+    public InternalSatelliteOnClickListener(PathMenu menu) {
+      this.menuRef = new WeakReference<>(menu);
+    }
+
+    @Override public void onClick(View v) {
+      PathMenu menu = menuRef.get();
+      if (menu != null && v.getVisibility() == View.VISIBLE) {
+        PathMenuItem menuItem = menu.getViewToItemMap().get(v);
+        v.startAnimation(menuItem.getClickAnimation());
+      }
+    }
+  }
+
+  /* --------------------------------------------------- */
+  /* > Utils */
+  /* --------------------------------------------------- */
+
+  private static class PathAnimationListener implements Animation.AnimationListener {
+
+    private WeakReference<View> viewRef;
+    private boolean isInAnimation;
+    private Map<View, PathMenuItem> viewToItemMap;
+
+    public PathAnimationListener(View view, boolean isIn, Map<View, PathMenuItem> viewToItemMap) {
+      this.viewRef = new WeakReference<>(view);
+      this.isInAnimation = isIn;
+      this.viewToItemMap = viewToItemMap;
+    }
+
+    @Override public void onAnimationStart(Animation animation) {
+      if (viewRef == null) return;
+      View view = viewRef.get();
+      if (view != null) {
+        viewToItemMap.get(view).getView().setVisibility(View.VISIBLE);
+      }
+    }
+
+    @Override public void onAnimationRepeat(Animation animation) {
+    }
+
+    @Override public void onAnimationEnd(Animation animation) {
+      if (viewRef == null) return;
+      View view = viewRef.get();
+      if (view != null) {
+        viewToItemMap.get(view)
+            .getView()
+            .setVisibility(isInAnimation
+                ? View.INVISIBLE
+                : View.VISIBLE);
+      }
+    }
   }
 
   /* --------------------------------------------------- */

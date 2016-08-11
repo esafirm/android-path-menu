@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/res/merged/androidTest/debug/anim/sat_main_rotate_left.xml",
+        "source": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/bundles/debug/res/anim/sat_main_rotate_left.xml"
+    },
+    {
+        "merged": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/res/merged/androidTest/debug/anim/sat_main_rotate_right.xml",
+        "source": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/bundles/debug/res/anim/sat_main_rotate_right.xml"
+    },
+    {
+        "merged": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/res/merged/androidTest/debug/anim/sat_item_anim_click.xml",
+        "source": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/bundles/debug/res/anim/sat_item_anim_click.xml"
+    },
+    {
+        "merged": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/res/merged/androidTest/debug/anim/sat_item_click_interpolator.xml",
+        "source": "/Users/esa/Documents/AndroidStudioProjects/OSS/path-menu/app/build/intermediates/bundles/debug/res/anim/sat_item_click_interpolator.xml"
+    }
+]

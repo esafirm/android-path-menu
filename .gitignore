@@ -1,3 +1,5 @@
+app/build
+sample/build
 .idea
 .gradle
 /local.properties

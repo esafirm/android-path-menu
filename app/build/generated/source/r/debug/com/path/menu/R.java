@@ -10,13 +10,9 @@ package com.path.menu;
 public final class R {
     public static final class anim {
         public static int sat_item_anim_click=0x7f040000;
-        public static int sat_item_anticipate_interpolator=0x7f040001;
-        public static int sat_item_click_interpolator=0x7f040002;
-        public static int sat_item_in_rotate_interpolator=0x7f040003;
-        public static int sat_item_out_rotate_interpolator=0x7f040004;
-        public static int sat_item_overshoot_interpolator=0x7f040005;
-        public static int sat_main_rotate_left=0x7f040006;
-        public static int sat_main_rotate_right=0x7f040007;
+        public static int sat_item_click_interpolator=0x7f040001;
+        public static int sat_main_rotate_left=0x7f040002;
+        public static int sat_main_rotate_right=0x7f040003;
     }
     public static final class attr {
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -75,7 +71,7 @@ containing a value of this type.
         public static int empty=0x7f050000;
     }
     public static final class styleable {
-        /** Attributes that can be used with a SatelliteMenu.
+        /** Attributes that can be used with a PathMenu.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
