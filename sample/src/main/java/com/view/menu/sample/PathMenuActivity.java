@@ -13,7 +13,7 @@ import com.path.menu.PathMenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SatelliteMenuActivity extends Activity {
+public class PathMenuActivity extends Activity {
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

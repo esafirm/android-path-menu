@@ -8,6 +8,6 @@ import com.path.menu.DegreeProvider;
 public interface PathMenuConfig {
   float getTotalSpacingDegrees();
   int getMenuDistance();
-  DegreeProvider getDegreeProvider();
   int getGravity();
+  DegreeProvider getDegreeProvider();
 }
